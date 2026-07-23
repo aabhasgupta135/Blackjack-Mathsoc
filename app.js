@@ -33,9 +33,25 @@ scoreForm.addEventListener('submit', async (e) => {
         return;
     }
     
-    // Disable button to prevent double submission
+    // Check if player has already played
     const submitBtn = scoreForm.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
+    const originalText = submitBtn.innerText;
+    submitBtn.innerText = 'Checking...';
+    
+    const { data, error } = await supabaseClient
+        .from('players')
+        .select('blackjack_score')
+        .eq('entry_number', entry)
+        .single();
+        
+    if (data && data.blackjack_score > 0) {
+        alert("This entry number has already recorded a score for Black Jack!");
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalText;
+        return;
+    }
+    
     submitBtn.innerText = 'Submitting...';
     
     await saveScore(name, entry, insta, score);

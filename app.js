@@ -9,7 +9,6 @@ const entryNumberInput = document.getElementById('entry-number');
 const instaHandleInput = document.getElementById('insta-handle');
 const playerScoreInput = document.getElementById('player-score');
 const leaderboardList = document.getElementById('leaderboard-list');
-const clearBtn = document.getElementById('clear-btn');
 
 // Local Storage Key
 const STORAGE_KEY = 'mathsoc_blackjack_leaderboard';
@@ -64,17 +63,6 @@ scoreForm.addEventListener('submit', async (e) => {
     
     // Refresh Leaderboard
     await updateLeaderboard();
-});
-
-clearBtn.addEventListener('click', async () => {
-    if (confirm("Are you sure you want to clear all Black Jack leaderboard data? This will reset them to 0 on the server.")) {
-        const { error } = await supabaseClient
-            .from('players')
-            .update({ blackjack_score: 0 })
-            .not('entry_number', 'is', null);
-            
-        await updateLeaderboard();
-    }
 });
 
 // Logic

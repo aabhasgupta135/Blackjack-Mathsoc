@@ -45,7 +45,7 @@ scoreForm.addEventListener('submit', async (e) => {
         .eq('entry_number', entry)
         .single();
         
-    if (data && data.blackjack_score > 0) {
+    if (data && data.blackjack_score !== 0) {
         alert("This entry number has already recorded a score for Black Jack!");
         submitBtn.disabled = false;
         submitBtn.innerText = originalText;
@@ -97,7 +97,7 @@ async function updateLeaderboard() {
     const { data: leaderboardData, error } = await supabaseClient
         .from('players')
         .select('player_name, entry_number, insta_handle, blackjack_score')
-        .gt('blackjack_score', 0)
+        .neq('blackjack_score', 0)
         .order('blackjack_score', { ascending: false })
         .limit(10);
         
